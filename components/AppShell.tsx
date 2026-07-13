@@ -9,6 +9,7 @@ const nav = [
   { href: '/customers', label: 'Customer Queue' },
   { href: '/playground', label: 'Agent Playground' },
   { href: '/evaluations', label: 'Evaluations' },
+  { href: '/prompt-blueprint', label: 'Prompt Blueprint' },
   { href: '/architecture', label: 'Architecture' },
   { href: '/presentation', label: 'Presentation' }
 ];
