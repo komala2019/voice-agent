@@ -4,18 +4,20 @@ import { useClientData } from '@/components/ClientData';
 import { orchestrationFor } from '@/lib/orchestration';
 import { runMockAgent } from '@/lib/mock-agent';
 import { runGeminiLLM } from '@/lib/llm-agent';
-import { setFailNextTool as setLibFailNextTool } from '@/lib/tools';
+
 import { getSuggestedPrompts } from '@/lib/suggested-prompts';
 import { applyOutcome } from '@/lib/state-updater';
+
+import { Customer, InteractionLog, AgentTurnResult } from '@/lib/types';
 
 export function VoiceAgent({ customerId }: { customerId: string }) {
   const { customers, setCustomers, setLogs } = useClientData();
   const [messages, setMessages] = useState<Array<{ role: 'user' | 'agent' | 'chips'; text: string }>>([]);
-  const [lastResult, setLastResult] = useState<any>(null);
+  const [lastResult, setLastResult] = useState<AgentTurnResult | null>(null);
   const [showChips, setShowChips] = useState(true);
   const transcriptRef = useRef<HTMLDivElement>(null);
 
-  const customer = useMemo(() => customers.find((c: any) => c.id === customerId), [customers, customerId]);
+  const customer = useMemo(() => customers.find((c: Customer) => c.id === customerId), [customers, customerId]);
 
   useEffect(() => {
     if (customer) {
@@ -95,15 +97,11 @@ export function VoiceAgent({ customerId }: { customerId: string }) {
   const state = orchestrationFor(customer, 11);
   const suggestedPrompts = getSuggestedPrompts(state.stage);
 
+  const [sessionLanguage, setSessionLanguage] = useState<'English' | 'Hindi' | 'Hinglish' | undefined>(undefined);
+
   const runUtterance = async (text: string) => {
     if (!text.trim()) return;
     setShowChips(false);
-
-    if (failNextTool) {
-      setLibFailNextTool(true);
-    } else {
-      setLibFailNextTool(false);
-    }
 
     let reply = '';
     let guardrailPassed = true;
@@ -123,18 +121,21 @@ export function VoiceAgent({ customerId }: { customerId: string }) {
       reply = `✨ ${reply}`;
       setMessages(m => m.slice(0, -1).concat([{ role: 'agent', text: reply }]));
     } else {
-      const result = runMockAgent(customer, text, 11);
+      const result = runMockAgent(customer, text, 11, { failNextTool, sessionLanguage });
       reply = result.reply;
       guardrailPassed = result.guardrailPassed;
       finalOutcome = result.outcome;
       detectedObjection = result.objection;
+      if (result.detectedLanguage && !sessionLanguage) {
+        setSessionLanguage(result.detectedLanguage);
+      }
       setLastResult(result);
       setMessages([...cleaned, { role: 'user', text }, { role: 'agent', text: reply }]);
       const updatedCustomer = applyOutcome(customer, finalOutcome, state.stage, detectedObjection);
-      setCustomers((list: any[]) => list.map((c: any) => c.id === customer.id ? updatedCustomer : c));
+      setCustomers((list: Customer[]) => list.map((c: Customer) => c.id === customer.id ? updatedCustomer : c));
     }
 
-    setLogs((curr: any[]) => [
+    setLogs((curr: InteractionLog[]) => [
       ...curr,
       { id: Math.random().toString(36).slice(2), customerId, kind: 'CALL', message: `User: ${text} | Agent: ${reply}${!guardrailPassed ? ' [Guardrail failed]' : ''}`, timestamp: new Date().toISOString() }
     ]);

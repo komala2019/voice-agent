@@ -32,12 +32,19 @@ function detectIntent(text: string): 'GREETING' | 'AGREEMENT' | 'OUT_OF_SCOPE' |
   if (/\b(hello|hi|hey|namaste|kem chho|kimchho|good morning|good afternoon)\b/.test(lower)) return 'GREETING';
   return 'OUT_OF_SCOPE';
 }
-export function runMockAgent(customer: Customer, userUtterance: string, hour: number): AgentTurnResult {
+export function runMockAgent(
+  customer: Customer, 
+  userUtterance: string, 
+  hour: number, 
+  options?: { failNextTool?: boolean; sessionLanguage?: 'English' | 'Hindi' | 'Hinglish' }
+): AgentTurnResult {
   const { stage, action } = orchestrationFor(customer, hour);
   const text = userUtterance.toLowerCase();
-  const detectedLanguage = detectLanguage(userUtterance);
+  const detectedLanguage = options?.sessionLanguage || detectLanguage(userUtterance);
   const objection = detectObjection(userUtterance);
   const toolCalls: ToolCall[] = [];
+  const fail = options?.failNextTool;
+
   if (/otp|cvv|pin|password/.test(text)) {
     return { reply: 'Please do not share OTP, CVV, PIN, or passwords. I do not need sensitive details.', detectedLanguage, toolCalls, outcome: 'HUMAN_ESCALATION', guardrailPassed: true };
   }
@@ -48,33 +55,33 @@ export function runMockAgent(customer: Customer, userUtterance: string, hour: nu
     return { reply: 'Your card is already active, so there is no onboarding action pending.', detectedLanguage, toolCalls, outcome: 'COMPLETED_CURRENT_STAGE', guardrailPassed: true };
   }
   if (stage === 'UNKNOWN_STATE') {
-    const t = createHumanEscalation(customer.id, 'Unknown onboarding state'); toolCalls.push(t);
+    const t = createHumanEscalation(customer.id, 'Unknown onboarding state', fail); toolCalls.push(t);
     return { reply: t.status === 'SUCCESS' ? 'I see a data mismatch, so I am routing this to a human specialist.' : 'I found a data mismatch and could not create escalation automatically.', detectedLanguage, toolCalls, outcome: 'HUMAN_ESCALATION', guardrailPassed: true };
   }
   if (text.includes('stop calling')) {
     return { reply: 'Understood. We will stop onboarding calls.', detectedLanguage, toolCalls, outcome: 'CUSTOMER_OPT_OUT', guardrailPassed: true };
   }
   if (text.includes('speak to a person') || text.includes('human')) {
-    const t = createHumanEscalation(customer.id, 'Human requested'); toolCalls.push(t);
+    const t = createHumanEscalation(customer.id, 'Human requested', fail); toolCalls.push(t);
     return { reply: t.status === 'SUCCESS' ? 'Sure, I am connecting your case to a person.' : 'I could not create the human handoff right now.', detectedLanguage, toolCalls, outcome: 'HUMAN_ESCALATION', guardrailPassed: true };
   }
   if (text.includes('already completed')) {
-    const t = getCustomerStage(customer.id); toolCalls.push(t);
+    const t = getCustomerStage(customer.id, fail); toolCalls.push(t);
     return { reply: t.status === 'SUCCESS' ? 'Thanks. I checked your latest stage and will guide you based on the refreshed status.' : 'I could not refresh your latest status right now.', detectedLanguage, toolCalls, outcome: 'AGREED_TO_COMPLETE', guardrailPassed: true };
   }
   if (text.includes('whatsapp')) {
     const template = stage === 'EKYC_PENDING' ? 'EKYC_GUIDE' : stage === 'VKYC_PENDING' ? 'VKYC_GUIDE' : 'ACTIVATION_GUIDE';
-    const t = sendWhatsApp(customer.id, template); toolCalls.push(t);
+    const t = sendWhatsApp(customer.id, template, fail); toolCalls.push(t);
     return { reply: t.status === 'SUCCESS' ? 'Done. I have sent the guide on WhatsApp.' : 'I could not send the WhatsApp guide right now.', detectedLanguage, toolCalls, outcome: t.status === 'SUCCESS' ? 'WHATSAPP_SENT' : 'SYSTEM_FAILURE', guardrailPassed: true, objection };
   }
   if (text.includes('tomorrow at 7 pm') || text.includes('call me tomorrow')) {
-    const t = scheduleCallback(customer.id, 'Tomorrow 7:00 PM', 'Customer requested callback'); toolCalls.push(t);
+    const t = scheduleCallback(customer.id, 'Tomorrow 7:00 PM', 'Customer requested callback', fail); toolCalls.push(t);
     return { reply: t.status === 'SUCCESS' ? 'Okay, I have scheduled a callback for tomorrow at 7 PM.' : 'I could not schedule the callback right now.', detectedLanguage, toolCalls, outcome: t.status === 'SUCCESS' ? 'CALLBACK_SCHEDULED' : 'SYSTEM_FAILURE', guardrailPassed: true };
   }
   if (objection) {
-    toolCalls.push(logObjection(customer.id, objection));
+    toolCalls.push(logObjection(customer.id, objection, fail));
     if (objection === 'ADVERTISEMENT_DISPUTE') {
-      const t = createHumanEscalation(customer.id, 'Ad dispute'); toolCalls.push(t);
+      const t = createHumanEscalation(customer.id, 'Ad dispute', fail); toolCalls.push(t);
       return { reply: 'I will route this advertisement concern to a human specialist.', detectedLanguage, objection, toolCalls, outcome: 'HUMAN_ESCALATION', guardrailPassed: true };
     }
     
@@ -107,7 +114,6 @@ export function runMockAgent(customer: Customer, userUtterance: string, hour: nu
   }
 
   if (intent === 'OUT_OF_SCOPE') {
-    // Simulated Knowledge Base Fallback
     toolCalls.push({ name: 'knowledge_base_search', status: 'SUCCESS', args: { query: text } });
     const reply = detectedLanguage === 'Hinglish'
       ? `Main check kar raha hoon... aapke account ke mutabiq, aapka agla step ${nextStepStr} hai. Kya aap isme madad chahte hain?`
@@ -115,7 +121,7 @@ export function runMockAgent(customer: Customer, userUtterance: string, hour: nu
     return { reply, detectedLanguage, toolCalls, outcome: 'NO_ANSWER', guardrailPassed: true };
   }
 
-  toolCalls.push(logCallOutcome(customer.id, 'AGREED_TO_COMPLETE'));
+  toolCalls.push(logCallOutcome(customer.id, 'AGREED_TO_COMPLETE', fail));
   const reply = action === 'GUIDE_EKYC'
     ? 'Your next step is eKYC. You can complete it anytime using the guided link.'
     : action === 'START_VKYC_NOW'

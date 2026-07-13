@@ -6,22 +6,24 @@ import { orchestrationFor } from '@/lib/orchestration';
 import { Badge } from '@/components/Badge';
 import { VoiceAgent } from '@/components/VoiceAgent';
 
+import { Customer, InteractionLog } from '@/lib/types';
+
 export default function CustomerDetailClient() {
   const params = useParams();
   const { customers, setCustomers, logs, setLogs } = useClientData();
-  const customer = customers.find((c:any) => c.id === params.id)!;
+  const customer = customers.find((c: Customer) => c.id === params.id)!;
   const { stage, action } = orchestrationFor(customer, 11);
-  const history = logs.filter((l:any) => l.customerId === customer.id);
+  const history = logs.filter((l: InteractionLog) => l.customerId === customer.id);
   const [stagedCustomer, setStagedCustomer] = useState(customer);
 
   useEffect(() => {
     setStagedCustomer(customer);
   }, [customer]);
 
-  const update = (field: string, value: string) => setStagedCustomer((prev:any) => ({...prev, [field]: value}));
+  const update = (field: string, value: string) => setStagedCustomer((prev: Customer) => ({...prev, [field]: value}));
   const handleRefresh = () => {
-    setCustomers((list:any[]) => list.map((c:any) => c.id === stagedCustomer.id ? stagedCustomer : c));
-    setLogs((curr:any[]) => [...curr, { id: Math.random().toString(36).slice(2), customerId: customer.id, kind: 'SYSTEM', message: `Manual Refresh: state deterministically re-evaluated`, timestamp: new Date().toISOString() }]);
+    setCustomers((list: Customer[]) => list.map((c: Customer) => c.id === stagedCustomer.id ? stagedCustomer : c));
+    setLogs((curr: InteractionLog[]) => [...curr, { id: Math.random().toString(36).slice(2), customerId: customer.id, kind: 'SYSTEM', message: `Manual Refresh: state deterministically re-evaluated`, timestamp: new Date().toISOString() }]);
   };
   const [isCallOpen, setIsCallOpen] = useState(false);
 
@@ -50,6 +52,7 @@ export default function CustomerDetailClient() {
             <div className="call-info-pills">
               <span className="call-pill">📞 {customer.phoneMasked}</span>
               <span className="call-pill">🌐 {customer.language}</span>
+              <span className="call-pill">🔄 Retries: {customer.retryCount}</span>
             </div>
             <button className="btn btn-end-call" onClick={() => setIsCallOpen(false)}>
               ✕ End Call
@@ -65,7 +68,7 @@ export default function CustomerDetailClient() {
             <details>
               <summary className="subtle small" style={{ cursor: 'pointer' }}>📋 Interaction history ({history.length} entries)</summary>
               <div className="stack" style={{ marginTop: '8px', maxHeight: '150px', overflowY: 'auto' }}>
-                {history.map((h:any) => (
+                {history.map((h: InteractionLog) => (
                   <div key={h.id} style={{ fontSize: '12px', padding: '6px 0', borderBottom: '1px solid var(--border)' }}>
                     <strong>{h.kind}</strong> — {h.message}
                     <div className="subtle" style={{ fontSize: '11px' }}>{h.timestamp}</div>
@@ -98,6 +101,7 @@ export default function CustomerDetailClient() {
           <div className="kv"><strong>eKYC</strong><span>{customer.ekycStatus}</span></div>
           <div className="kv"><strong>VKYC</strong><span>{customer.vkycStatus}</span></div>
           <div className="kv"><strong>Activation</strong><span>{customer.activationStatus}</span></div>
+          <div className="kv"><strong>Retries</strong><span>{customer.retryCount} total</span></div>
         </div>
 
         <div className="card stack">
@@ -128,7 +132,7 @@ export default function CustomerDetailClient() {
 
       <div className="card stack" style={{ marginTop: '8px' }}>
         <h3>Interaction history</h3>
-        {history.length ? history.map((h:any) => (
+        {history.length ? history.map((h: InteractionLog) => (
           <div key={h.id}>
             <strong>{h.kind}</strong>
             <div>{h.message}</div>

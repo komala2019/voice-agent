@@ -6,7 +6,7 @@ const Ctx = createContext<any>(null);
 export function ClientDataProvider({ children }: { children: ReactNode }) {
   const [customers, setCustomers] = useState<Customer[]>(seedCustomers);
   const [logs, setLogs] = useState<InteractionLog[]>(seedLogs);
-  const [failNextTool, setFailNextTool] = useState(false);
+
   useEffect(() => {
     const raw = localStorage.getItem('tiger-demo-state');
     if (raw) {
@@ -15,10 +15,12 @@ export function ClientDataProvider({ children }: { children: ReactNode }) {
       setLogs(parsed.logs || seedLogs);
     }
   }, []);
+
   useEffect(() => {
     localStorage.setItem('tiger-demo-state', JSON.stringify({ customers, logs }));
   }, [customers, logs]);
-  const value = useMemo(() => ({ customers, setCustomers, logs, setLogs, failNextTool, setFailNextTool }), [customers, logs, failNextTool]);
+
+  const value = useMemo(() => ({ customers, setCustomers, logs, setLogs }), [customers, logs]);
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }
 export function useClientData() { return useContext(Ctx); }

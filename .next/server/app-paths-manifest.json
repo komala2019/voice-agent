@@ -1,1 +1,8 @@
-{}
+{
+  "/architecture/page": "app/architecture/page.js",
+  "/page": "app/page.js",
+  "/help/page": "app/help/page.js",
+  "/customers/page": "app/customers/page.js",
+  "/playground/page": "app/playground/page.js",
+  "/evaluations/page": "app/evaluations/page.js"
+}

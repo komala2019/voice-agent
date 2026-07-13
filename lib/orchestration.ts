@@ -1,6 +1,6 @@
 import { Customer, NextBestAction, OnboardingStage } from './types';
 export function resolveStage(customer: Customer): OnboardingStage {
-  if (customer.cardStatus === 'ACTIVE') return 'CARD_ACTIVE';
+  if (customer.cardStatus === 'ACTIVE' || customer.activationStatus === 'COMPLETED') return 'CARD_ACTIVE';
   if (customer.vkycStatus === 'COMPLETED' && customer.activationStatus !== 'COMPLETED') return 'ACTIVATION_PENDING';
   if (customer.ekycStatus === 'COMPLETED' && customer.vkycStatus !== 'COMPLETED') return 'VKYC_PENDING';
   if (customer.cardStatus === 'APPROVED' && customer.ekycStatus !== 'COMPLETED') return 'EKYC_PENDING';
