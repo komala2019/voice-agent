@@ -4,11 +4,12 @@ import { useClientData } from '@/components/ClientData';
 import { Badge } from '@/components/Badge';
 import { orchestrationFor } from '@/lib/orchestration';
 import { VoiceAgent } from '@/components/VoiceAgent';
+import { Customer } from '@/lib/types';
 
 export default function PlaygroundPage() {
   const { customers } = useClientData();
   const [customerId, setCustomerId] = useState(customers[0].id);
-  const customer = useMemo(() => customers.find((c: any) => c.id === customerId), [customers, customerId]);
+  const customer = useMemo(() => customers.find((c: Customer) => c.id === customerId), [customers, customerId]);
   
   if (!customer) return null;
   const state = orchestrationFor(customer, 11);
@@ -17,7 +18,7 @@ export default function PlaygroundPage() {
     <div className="page-header"><div><h1>Agent Playground</h1><p>Source state → resolved stage → next best action → agent conversation.</p></div></div>
     <div className="toolbar">
       <select className="select" value={customerId} onChange={(e) => setCustomerId(e.target.value)}>
-        {customers.map((c: any) => <option key={c.id} value={c.id}>{c.name}</option>)}
+        {customers.map((c: Customer) => <option key={c.id} value={c.id}>{c.name}</option>)}
       </select>
     </div>
     

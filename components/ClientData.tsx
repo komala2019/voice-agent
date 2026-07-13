@@ -2,7 +2,16 @@
 import { ReactNode, createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { seedCustomers, seedLogs } from '@/lib/seed-data';
 import { Customer, InteractionLog } from '@/lib/types';
-const Ctx = createContext<any>(null);
+
+export type ClientDataContextType = {
+  customers: Customer[];
+  setCustomers: (c: Customer[] | ((prev: Customer[]) => Customer[])) => void;
+  logs: InteractionLog[];
+  setLogs: (l: InteractionLog[] | ((prev: InteractionLog[]) => InteractionLog[])) => void;
+};
+
+const Ctx = createContext<ClientDataContextType | null>(null);
+
 export function ClientDataProvider({ children }: { children: ReactNode }) {
   const [customers, setCustomers] = useState<Customer[]>(seedCustomers);
   const [logs, setLogs] = useState<InteractionLog[]>(seedLogs);
@@ -23,4 +32,9 @@ export function ClientDataProvider({ children }: { children: ReactNode }) {
   const value = useMemo(() => ({ customers, setCustomers, logs, setLogs }), [customers, logs]);
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }
-export function useClientData() { return useContext(Ctx); }
+
+export function useClientData() { 
+  const ctx = useContext(Ctx); 
+  if (!ctx) throw new Error("useClientData must be used within ClientDataProvider");
+  return ctx; 
+}
