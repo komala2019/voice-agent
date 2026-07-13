@@ -28,7 +28,7 @@ function detectObjection(text: string): Objection | undefined {
 function detectIntent(text: string): 'GREETING' | 'AGREEMENT' | 'OUT_OF_SCOPE' | 'HOLD' {
   const lower = text.toLowerCase();
   if (/(wait|hold on|ek minute|1 minute|ruko|give me a sec|ek sec)/.test(lower)) return 'HOLD';
-  if (/\b(okay|yes|sure|tell me|karo|haan|ji)\b/.test(lower)) return 'AGREEMENT';
+  if (/\b(okay|yes|sure|tell me|karo|haan|ji)\b|how to|kya karna|what to|what should|next step|aage kya|batao|kaise|whats next|what's next|what next/.test(lower)) return 'AGREEMENT';
   if (/\b(hello|hi|hey|namaste|kem chho|kimchho|good morning|good afternoon)\b/.test(lower)) return 'GREETING';
   return 'OUT_OF_SCOPE';
 }
@@ -107,11 +107,12 @@ export function runMockAgent(customer: Customer, userUtterance: string, hour: nu
   }
 
   if (intent === 'OUT_OF_SCOPE') {
-    toolCalls.push({ name: 'guardrail_flag', status: 'FAILED', args: { reason: 'Out of scope input' } });
+    // Simulated Knowledge Base Fallback
+    toolCalls.push({ name: 'knowledge_base_search', status: 'SUCCESS', args: { query: text } });
     const reply = detectedLanguage === 'Hinglish'
-      ? `Main sirf eKYC, VKYC aur card activation mein madad kar sakta hoon. Aapka agla step ${nextStepStr} hai.`
-      : `I am an onboarding assistant and can only help you with eKYC, VKYC, and card activation. For your application, your next step is ${nextStepStr}.`;
-    return { reply, detectedLanguage, toolCalls, outcome: 'OBJECTION_UNRESOLVED', guardrailPassed: false };
+      ? `Main check kar raha hoon... aapke account ke mutabiq, aapka agla step ${nextStepStr} hai. Kya aap isme madad chahte hain?`
+      : `Let me check my knowledge base... Based on your profile, the answer is that your immediate next step is ${nextStepStr}. Would you like me to guide you through it?`;
+    return { reply, detectedLanguage, toolCalls, outcome: 'NO_ANSWER', guardrailPassed: true };
   }
 
   toolCalls.push(logCallOutcome(customer.id, 'AGREED_TO_COMPLETE'));

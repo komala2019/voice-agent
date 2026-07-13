@@ -20,8 +20,14 @@ export default function HomePage() {
     <div className="page-header"><div><h1>Operations Dashboard</h1><p>Deterministic orchestration picks what happens next. The AI agent shapes how it is communicated.</p></div></div>
     <div className="grid grid-4">
       {[
-        ['Approved customers', counts.approved], ['eKYC pending', counts.ekyc], ['VKYC pending', counts.vkyc], ['Activation pending', counts.activation],
-        ['Active', counts.active], ['AI calls attempted', counts.calls], ['Human escalations', counts.escalations], ['Guardrail events', counts.guardrails]
+        ['✅ Approved customers', counts.approved], 
+        ['📄 eKYC pending', counts.ekyc], 
+        ['📹 VKYC pending', counts.vkyc], 
+        ['💳 Activation pending', counts.activation],
+        ['🚀 Active', counts.active], 
+        ['📞 AI calls attempted', counts.calls], 
+        ['👨‍💼 Human escalations', counts.escalations], 
+        ['🚨 Guardrail events', counts.guardrails]
       ].map(([label, value]) => <div key={String(label)} className="card"><div className="subtle">{label}</div><div className="metric">{value}</div></div>)}
     </div>
     <div className="grid grid-2">

@@ -49,6 +49,49 @@ const slides = [
     )
   },
   {
+    title: "Unified Agent + CRM Integration",
+    content: (
+      <div style={{ fontSize: '1.1rem', lineHeight: '1.6' }}>
+        <p>The Voice Agent is natively embedded as the primary Operations Console tool, allowing live state mutations.</p>
+        <br/>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <div style={{ background: '#0b192c', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #00dfa2' }}>
+            <strong>1. Intelligent Greeting</strong><br/>
+            When "Start Call" is triggered, the agent reads the CRM stage and instantly generates a context-aware greeting.
+          </div>
+          <div style={{ background: '#0b192c', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #00dfa2' }}>
+            <strong>2. Live State Mutations</strong><br/>
+            If a customer agrees to complete eKYC during the call, the `state-updater.ts` mutates the CRM in real-time.
+          </div>
+          <div style={{ background: '#0b192c', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #00dfa2' }}>
+            <strong>3. Reactive UI Architecture</strong><br/>
+            The Journey Timeline, Next Best Action badges, and Customer Context cards instantly update via shared context.
+          </div>
+        </div>
+      </div>
+    )
+  },
+  {
+    title: "Simulated Knowledge Base & Golden Set",
+    content: (
+      <div style={{ fontSize: '1.1rem', lineHeight: '1.6' }}>
+        <p>A deterministic approach to testing out-of-scope interactions and suggested conversation flows.</p>
+        <br/>
+        <h3>1. Embedded Golden Set Prompts</h3>
+        <ul>
+          <li><strong>Stage-Awareness:</strong> Suggested conversation starters appear dynamically as clickable chips inside the chat.</li>
+          <li><strong>Zero-Typing Testing:</strong> Users can test 31 unique scenarios (objections, agreements, holds) instantly.</li>
+        </ul>
+        <br/>
+        <h3>2. Knowledge Base Fallback</h3>
+        <ul>
+          <li>When the agent detects an <strong>OUT_OF_SCOPE</strong> query, it executes a simulated `knowledge_base_search` tool call.</li>
+          <li>It generates a response that intelligently bridges the out-of-scope query back to the customer's required next onboarding step.</li>
+        </ul>
+      </div>
+    )
+  },
+  {
     title: "Multi-Lingual & Intent Handling",
     content: (
       <div style={{ fontSize: '1.1rem', lineHeight: '1.6' }}>
@@ -58,7 +101,6 @@ const slides = [
         <ul>
           <li><strong>Greetings:</strong> Catches <em>"Hello, Kem chho"</em> and replies contextually without forcing flow.</li>
           <li><strong>Hold Statements:</strong> Recognizes <em>"Ek minute ruko"</em> and pauses the flow gracefully.</li>
-          <li><strong>Out of Scope:</strong> Enforces boundaries. <em>"Main sirf eKYC aur VKYC mein madad kar sakta hoon."</em></li>
         </ul>
         <br/>
         <h3>2. Objection Mapping (Hinglish Support)</h3>
@@ -188,7 +230,7 @@ export default function PresentationPage() {
             ← Previous
           </button>
           
-          <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+          <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
             {slides.map((_, i) => (
               <div 
                 key={i} 

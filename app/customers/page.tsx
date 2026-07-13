@@ -21,7 +21,9 @@ export default function CustomersPage() {
         <select className="select" value={objectionFilter} onChange={(e)=>setObjectionFilter(e.target.value)}><option>ALL</option><option>JOINING_FEE</option><option>JEWELS_VALUE</option><option>LOW_CREDIT_LIMIT</option><option>KYC_COMPLEXITY</option></select>
         <label className="badge"><input type="checkbox" checked={needsEsc} onChange={(e)=>setNeedsEsc(e.target.checked)} /> Needs escalation</label>
       </div>
-      <table className="table"><thead><tr><th>Customer</th><th>Stage</th><th>Next best action</th><th>Previous objection</th><th>Retry</th><th>Last interaction</th><th>Action</th></tr></thead>
-      <tbody>{rows.map((c:any)=><tr key={c.id}><td><strong>{c.name}</strong><div className="small subtle">{c.phoneMasked}</div></td><td><Badge value={c.stage} tone={`stage-${c.stage}`} /></td><td><Badge value={c.action} tone={`action-${c.action}`} /></td><td>{c.previousObjection ? <Badge value={c.previousObjection} /> : <span className="subtle">—</span>}</td><td>{c.retryCount}</td><td>{c.lastInteraction || '—'}</td><td><Link className="btn btn-secondary" href={`/customers/${c.id}`}>Open customer</Link></td></tr>)}</tbody></table>
+      <div className="table-container">
+        <table className="table"><thead><tr><th>Customer</th><th>Stage</th><th>Next best action</th><th>Previous objection</th><th>Retry</th><th>Last interaction</th><th>Action</th></tr></thead>
+        <tbody>{rows.map((c:any)=><tr key={c.id}><td><strong>{c.name}</strong><div className="small subtle">{c.phoneMasked}</div></td><td><Badge value={c.stage} tone={`stage-${c.stage}`} /></td><td><Badge value={c.action} tone={`action-${c.action}`} /></td><td>{c.previousObjection ? <Badge value={c.previousObjection} /> : <span className="subtle">—</span>}</td><td>{c.retryCount}</td><td>{c.lastInteraction || '—'}</td><td><Link className="btn btn-secondary" href={`/customers/${c.id}?call=true`}>Start Call</Link></td></tr>)}</tbody></table>
+      </div>
     </div></div>;
 }
