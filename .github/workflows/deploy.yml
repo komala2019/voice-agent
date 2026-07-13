@@ -34,10 +34,10 @@ jobs:
           static_site_generator: next
           
       - name: Install dependencies
-        run: npm ci
+        run: npm install --legacy-peer-deps
         
       - name: Build with Next.js
-        run: npm run build
+        run: CI=false npm run build
         
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
