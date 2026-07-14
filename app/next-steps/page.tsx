@@ -118,10 +118,10 @@ export default function NextStepsPage() {
         <h3 style={{ margin: '0 0 12px 0', color: '#fbbf24' }}>Current Prototype vs Production</h3>
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.9rem' }}>
           <thead>
-            <tr style={{ borderBottom: '2px solid #334155' }}>
-              <th style={{ textAlign: 'left', padding: '8px', color: '#94a3b8' }}>Capability</th>
-              <th style={{ textAlign: 'left', padding: '8px', color: '#94a3b8' }}>Prototype (Now)</th>
-              <th style={{ textAlign: 'left', padding: '8px', color: '#94a3b8' }}>Production (Target)</th>
+            <tr style={{ borderBottom: '2px solid #475569' }}>
+              <th style={{ textAlign: 'left', padding: '10px 12px', color: '#e2e8f0', background: '#334155' }}>Capability</th>
+              <th style={{ textAlign: 'left', padding: '10px 12px', color: '#fcd34d', background: '#334155' }}>Prototype (Now)</th>
+              <th style={{ textAlign: 'left', padding: '10px 12px', color: '#6ee7b7', background: '#334155' }}>Production (Target)</th>
             </tr>
           </thead>
           <tbody>
@@ -134,11 +134,11 @@ export default function NextStepsPage() {
               ['Guardrails', 'Regex + rule-based checks', 'NeMo Guardrails + PII redaction service'],
               ['Auth', 'None (demo)', 'SSO / OAuth + RBAC'],
               ['Analytics', 'Seeded counters', 'Real-time dashboards + call QA pipeline'],
-            ].map(([cap, now, target]) => (
-              <tr key={cap} style={{ borderBottom: '1px solid #1e293b' }}>
-                <td style={{ padding: '8px', fontWeight: 600 }}>{cap}</td>
-                <td style={{ padding: '8px', color: '#f87171' }}>{now}</td>
-                <td style={{ padding: '8px', color: '#34d399' }}>{target}</td>
+            ].map(([cap, now, target], i) => (
+              <tr key={cap} style={{ borderBottom: '1px solid #334155', background: i % 2 === 0 ? '#1e293b' : '#0f172a' }}>
+                <td style={{ padding: '10px 12px', fontWeight: 600, color: '#f1f5f9' }}>{cap}</td>
+                <td style={{ padding: '10px 12px', color: '#fbbf24' }}>{now}</td>
+                <td style={{ padding: '10px 12px', color: '#34d399' }}>{target}</td>
               </tr>
             ))}
           </tbody>
