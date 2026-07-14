@@ -115,8 +115,8 @@ export default function HomePage() {
           <div className="card stack" style={{ borderTop: '4px solid #06b6d4' }}>
             <h3>Live Agent Validation</h3>
             <div style={{ display: 'flex', gap: '12px', marginBottom: '12px' }}>
-              <span className="badge" style={{ background: '#0e7490', color: '#fff' }}>Platform: Vapi</span>
-              <span className="badge" style={{ background: '#15803d', color: '#fff' }}>Status: In Testing</span>
+              <span className="badge" style={{ background: '#164e63', color: '#67e8f9', border: '1px solid #0e7490', padding: '4px 12px', borderRadius: '6px', fontSize: '0.8rem', fontWeight: 600 }}>Platform: Vapi</span>
+              <span className="badge" style={{ background: '#14532d', color: '#86efac', border: '1px solid #15803d', padding: '4px 12px', borderRadius: '6px', fontSize: '0.8rem', fontWeight: 600 }}>Status: In Testing</span>
             </div>
             
             <div className="kv" style={{ marginBottom: '16px' }}>
@@ -125,10 +125,10 @@ export default function HomePage() {
 
             <h4 style={{ margin: '0 0 8px 0', color: '#22d3ee' }}>Test Scenarios Executed</h4>
             <div style={{ display: 'grid', gap: '8px', fontSize: '0.85rem' }}>
-              <div style={{ padding: '8px', background: '#0f172a', borderRadius: '4px' }}><strong>✅ eKYC Reminder:</strong> Successfully sent WhatsApp link and resolved call.</div>
-              <div style={{ padding: '8px', background: '#0f172a', borderRadius: '4px' }}><strong>✅ VKYC Window Violation:</strong> Blocked call initiation correctly at 10 PM.</div>
-              <div style={{ padding: '8px', background: '#0f172a', borderRadius: '4px' }}><strong>✅ Opt-Out Handling:</strong> Apologized, flagged optOut=true, ended call.</div>
-              <div style={{ padding: '8px', background: '#0f172a', borderRadius: '4px' }}><strong>✅ Jewels Objection:</strong> Explained 5 Jewels = ₹1 and successfully guided to next stage.</div>
+              <div style={{ padding: '10px 12px', background: '#1a2e1a', borderRadius: '6px', borderLeft: '3px solid #22c55e', color: '#d1fae5' }}><strong>✅ eKYC Reminder:</strong> Successfully sent WhatsApp link and resolved call.</div>
+              <div style={{ padding: '10px 12px', background: '#1a2e1a', borderRadius: '6px', borderLeft: '3px solid #22c55e', color: '#d1fae5' }}><strong>✅ VKYC Window Violation:</strong> Blocked call initiation correctly at 10 PM.</div>
+              <div style={{ padding: '10px 12px', background: '#1a2e1a', borderRadius: '6px', borderLeft: '3px solid #22c55e', color: '#d1fae5' }}><strong>✅ Opt-Out Handling:</strong> Apologized, flagged optOut=true, ended call.</div>
+              <div style={{ padding: '10px 12px', background: '#1a2e1a', borderRadius: '6px', borderLeft: '3px solid #22c55e', color: '#d1fae5' }}><strong>✅ Jewels Objection:</strong> Explained 5 Jewels = ₹1 and successfully guided to next stage.</div>
             </div>
           </div>
         </div>

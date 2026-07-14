@@ -14,6 +14,7 @@ const nav = [
   { href: '/prompt-blueprint', label: 'Prompt Blueprint' },
   { href: '/agent-blueprint', label: 'Agent Mega-Prompt' },
   { href: '/codex', label: 'Codex Spec' },
+  { href: '/next-steps', label: 'Path to Production' },
   { href: '/architecture', label: 'Architecture' },
   { href: '/presentation', label: 'Presentation' }
 ];
