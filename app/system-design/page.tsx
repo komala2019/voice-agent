@@ -11,100 +11,73 @@ export default function SystemDesignPage() {
       </div>
 
       <div className="card stack">
-        <h2>Data Flow & Dependencies</h2>
-        <div style={{ padding: '24px', background: '#0f172a', borderRadius: '12px', border: '1px solid #1e293b' }}>
-          <div style={{ display: 'grid', gap: '16px', gridTemplateColumns: '1fr', maxWidth: '800px', margin: '0 auto' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '16px', background: '#1e293b', borderRadius: '8px' }}>
-              <div style={{ flex: 1, fontWeight: 'bold', color: '#38bdf8' }}>CRM</div>
-              <div style={{ flex: 2, textAlign: 'center', fontSize: '0.9rem' }}>
-                <div style={{ color: '#94a3b8' }}>[read] approved customers, stage, retry metadata</div>
-                <div style={{ color: '#10b981', fontSize: '1.2rem' }}>→</div>
-              </div>
-              <div style={{ flex: 1, fontWeight: 'bold', color: '#a855f7' }}>Voice Agent</div>
-            </div>
+        <h2 style={{ margin: '0 0 4px' }}>Data Flow & Dependencies</h2>
+        <p className="subtle" style={{ margin: '0 0 16px' }}>How systems interact during the onboarding lifecycle.</p>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '16px', background: '#1e293b', borderRadius: '8px' }}>
-              <div style={{ flex: 1, fontWeight: 'bold', color: '#a855f7' }}>Voice Agent</div>
-              <div style={{ flex: 2, textAlign: 'center', fontSize: '0.9rem' }}>
-                <div style={{ color: '#94a3b8' }}>[read/write] current status (eKYC/VKYC)</div>
-                <div style={{ color: '#10b981', fontSize: '1.2rem' }}>↔</div>
+        <div className="stack" style={{ gap: '10px' }}>
+          {[
+            { from: 'CRM', to: 'Voice Agent', label: 'read', desc: 'Approved customers, current stage, retry metadata', color: 'var(--primary)' },
+            { from: 'Voice Agent', to: 'KYC System', label: 'read / write', desc: 'Current eKYC/VKYC/activation status; write stage updates after successful actions', color: '#964219' },
+            { from: 'Voice Agent', to: 'Dialler', label: 'notify', desc: 'Call initiation requests with priority and stage', color: '#7c3aed' },
+            { from: 'Voice Agent', to: 'WhatsApp', label: 'notify', desc: 'Send templated guidance when user asks or when stage requires it', color: '#437a22' },
+            { from: 'Voice Agent', to: 'CRM', label: 'write', desc: 'Log call outcome, objections, opt-out, escalations', color: 'var(--primary)' },
+            { from: 'CRM', to: 'Inside Sales', label: 'notify', desc: 'Push unresolved or high-risk escalation cases', color: '#a12c7b' },
+          ].map((flow) => (
+            <div key={flow.from + flow.to + flow.label} style={{
+              display: 'flex', alignItems: 'center', gap: '12px', padding: '14px 16px',
+              background: 'var(--surface-2)', borderRadius: '12px', border: '1px solid var(--border)',
+              flexWrap: 'wrap'
+            }}>
+              <div style={{ fontWeight: 700, color: flow.color, minWidth: '100px', fontSize: '0.95rem' }}>{flow.from}</div>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flex: '0 0 auto' }}>
+                <span style={{
+                  background: flow.color, color: '#fff', padding: '2px 10px',
+                  borderRadius: '999px', fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em'
+                }}>{flow.label}</span>
+                <span style={{ fontSize: '1.2rem', color: flow.color }}>→</span>
               </div>
-              <div style={{ flex: 1, fontWeight: 'bold', color: '#f59e0b' }}>KYC System</div>
+              <div style={{ fontWeight: 700, color: flow.color, minWidth: '100px', fontSize: '0.95rem' }}>{flow.to}</div>
+              <div style={{ flex: 1, color: 'var(--muted)', fontSize: '0.85rem', minWidth: '200px' }}>{flow.desc}</div>
             </div>
-
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '16px', background: '#1e293b', borderRadius: '8px' }}>
-              <div style={{ flex: 1, fontWeight: 'bold', color: '#a855f7' }}>Voice Agent</div>
-              <div style={{ flex: 2, textAlign: 'center', fontSize: '0.9rem' }}>
-                <div style={{ color: '#94a3b8' }}>[notify] place call requests</div>
-                <div style={{ color: '#10b981', fontSize: '1.2rem' }}>→</div>
-              </div>
-              <div style={{ flex: 1, fontWeight: 'bold', color: '#ec4899' }}>Dialler</div>
-            </div>
-
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '16px', background: '#1e293b', borderRadius: '8px' }}>
-              <div style={{ flex: 1, fontWeight: 'bold', color: '#a855f7' }}>Voice Agent</div>
-              <div style={{ flex: 2, textAlign: 'center', fontSize: '0.9rem' }}>
-                <div style={{ color: '#94a3b8' }}>[notify] send guidance template</div>
-                <div style={{ color: '#10b981', fontSize: '1.2rem' }}>→</div>
-              </div>
-              <div style={{ flex: 1, fontWeight: 'bold', color: '#22c55e' }}>WhatsApp</div>
-            </div>
-
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '16px', background: '#1e293b', borderRadius: '8px' }}>
-              <div style={{ flex: 1, fontWeight: 'bold', color: '#a855f7' }}>Voice Agent</div>
-              <div style={{ flex: 2, textAlign: 'center', fontSize: '0.9rem' }}>
-                <div style={{ color: '#94a3b8' }}>[write] log outcome, objection, opt-out, escalation</div>
-                <div style={{ color: '#10b981', fontSize: '1.2rem' }}>→</div>
-              </div>
-              <div style={{ flex: 1, fontWeight: 'bold', color: '#38bdf8' }}>CRM</div>
-            </div>
-
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '16px', background: '#1e293b', borderRadius: '8px' }}>
-              <div style={{ flex: 1, fontWeight: 'bold', color: '#38bdf8' }}>CRM</div>
-              <div style={{ flex: 2, textAlign: 'center', fontSize: '0.9rem' }}>
-                <div style={{ color: '#94a3b8' }}>[notify] push unresolved or high-risk cases</div>
-                <div style={{ color: '#10b981', fontSize: '1.2rem' }}>→</div>
-              </div>
-              <div style={{ flex: 1, fontWeight: 'bold', color: '#ef4444' }}>Inside Sales</div>
-            </div>
-          </div>
-          <p style={{ textAlign: 'center', color: '#cbd5e1', marginTop: '24px', fontStyle: 'italic', fontSize: '1.1rem' }}>
-            "Stage truth comes from source-system status, not agent memory."
-          </p>
+          ))}
         </div>
 
-        <div style={{ display: 'flex', gap: '16px', marginTop: '16px' }}>
-          <div style={{ padding: '16px', background: '#1e293b', borderRadius: '8px', flex: 1 }}>
-            <h3 style={{ margin: '0 0 8px 0', color: '#fcd34d' }}>Dependencies</h3>
-            <ul style={{ margin: 0, paddingLeft: '20px', color: '#cbd5e1' }}>
-              <li>eKYC must be completed before VKYC.</li>
-              <li>VKYC must be completed before activation.</li>
-              <li>VKYC calls only happen in the 9 AM–9 PM window.</li>
-            </ul>
-          </div>
+        <div style={{
+          marginTop: '16px', padding: '16px', background: 'var(--surface-2)',
+          borderRadius: '12px', borderLeft: '4px solid var(--primary)', fontStyle: 'italic', fontWeight: 600, color: 'var(--text)'
+        }}>
+          "Stage truth comes from source-system status, not agent memory."
+        </div>
+
+        <div style={{ marginTop: '16px', padding: '16px', background: 'var(--surface-2)', borderRadius: '12px' }}>
+          <h3 style={{ margin: '0 0 8px', color: 'var(--warning)' }}>Dependencies</h3>
+          <ul style={{ margin: 0, paddingLeft: '20px', color: 'var(--text)' }}>
+            <li>eKYC must be completed before VKYC.</li>
+            <li>VKYC must be completed before activation.</li>
+            <li>VKYC calls only happen in the <strong>9 AM – 9 PM</strong> window.</li>
+          </ul>
         </div>
       </div>
 
       <div className="card stack">
-        <h2 style={{ color: '#ef4444' }}>Failure & Fallbacks</h2>
-        <p>Explicit paths for when operations go off the happy path:</p>
-        <div style={{ display: 'grid', gap: '16px', gridTemplateColumns: '1fr 1fr' }}>
-          <div style={{ padding: '16px', background: '#3f1a1a', border: '1px solid #7f1d1d', borderRadius: '8px' }}>
-            <h3 style={{ margin: '0 0 8px 0', color: '#fca5a5' }}>State Inconsistency</h3>
-            <p style={{ margin: 0, fontSize: '0.95rem' }}>If stage data is stale or inconsistent, or if the user repeatedly contradicts system state, escalate to human inside sales.</p>
-          </div>
-          <div style={{ padding: '16px', background: '#3f1a1a', border: '1px solid #7f1d1d', borderRadius: '8px' }}>
-            <h3 style={{ margin: '0 0 8px 0', color: '#fca5a5' }}>Tool Failures</h3>
-            <p style={{ margin: 0, fontSize: '0.95rem' }}>If tools fail (e.g., WhatsApp send, callback scheduling), agent apologizes and requests manual action. Escalate after N failures.</p>
-          </div>
-          <div style={{ padding: '16px', background: '#3f1a1a', border: '1px solid #7f1d1d', borderRadius: '8px' }}>
-            <h3 style={{ margin: '0 0 8px 0', color: '#fca5a5' }}>Opt-Outs & Deactivation</h3>
-            <p style={{ margin: 0, fontSize: '0.95rem' }}>Stop outreach completely after explicit opt-out or repeated "not interested". Flag CRM to block future automated dials.</p>
-          </div>
-          <div style={{ padding: '16px', background: '#3f1a1a', border: '1px solid #7f1d1d', borderRadius: '8px' }}>
-            <h3 style={{ margin: '0 0 8px 0', color: '#fca5a5' }}>Data Mismatch</h3>
-            <p style={{ margin: 0, fontSize: '0.95rem' }}>Log data mismatches (e.g. user claims eKYC is done but system says pending) to a separate queue for operations review.</p>
-          </div>
+        <h2 style={{ margin: '0 0 4px', color: 'var(--error)' }}>Failure & Fallbacks</h2>
+        <p className="subtle" style={{ margin: '0 0 12px' }}>Explicit paths for when operations go off the happy path.</p>
+
+        <div className="grid grid-2">
+          {[
+            { title: 'State Inconsistency', desc: 'If stage data is stale or inconsistent, or if the user repeatedly contradicts system state, escalate to human inside sales.', icon: '⚠️' },
+            { title: 'Tool Failures', desc: 'If tools fail (e.g., WhatsApp send, callback scheduling), agent apologizes and requests manual action. Escalate after N failures.', icon: '🔧' },
+            { title: 'Opt-Outs & Deactivation', desc: 'Stop outreach completely after explicit opt-out or repeated "not interested". Flag CRM to block future automated dials.', icon: '🛑' },
+            { title: 'Data Mismatch', desc: 'Log data mismatches (e.g. user claims eKYC is done but system says pending) to a separate queue for operations review.', icon: '🔀' },
+          ].map((item) => (
+            <div key={item.title} style={{
+              padding: '16px', background: 'var(--surface-2)', border: '1px solid var(--border)',
+              borderRadius: '12px', borderLeft: '4px solid var(--error)'
+            }}>
+              <h3 style={{ margin: '0 0 8px', fontSize: '1rem' }}>{item.icon} {item.title}</h3>
+              <p style={{ margin: 0, fontSize: '0.9rem', color: 'var(--muted)' }}>{item.desc}</p>
+            </div>
+          ))}
         </div>
       </div>
     </div>

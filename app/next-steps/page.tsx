@@ -4,8 +4,7 @@ const roadmapPhases = [
   {
     phase: 'Phase 1',
     title: 'Knowledge Layer & RAG Pipeline',
-    color: '#8b5cf6',
-    borderColor: '#7c3aed',
+    color: '#7c3aed',
     items: [
       { label: 'Vector Database', desc: 'Add Pinecone / pgvector / Weaviate to store chunked product docs, T&Cs, and FAQs. Replace hardcoded prompt facts with semantic retrieval.' },
       { label: 'Document Chunking', desc: 'Chunk policy documents (card benefits, fee structures, compliance rules) into ~512-token segments with overlap for accurate retrieval.' },
@@ -16,8 +15,7 @@ const roadmapPhases = [
   {
     phase: 'Phase 2',
     title: 'Real Voice & Telephony',
-    color: '#06b6d4',
-    borderColor: '#0891b2',
+    color: 'var(--primary)',
     items: [
       { label: 'Voice Platform Integration', desc: 'Replace Web Speech API with Vapi / Retell / Bland.ai for production-grade STT/TTS with <500ms latency.' },
       { label: 'VAD (Voice Activity Detection)', desc: 'Add real-time interruption handling via WebSockets so the agent stops speaking when the customer talks.' },
@@ -28,8 +26,7 @@ const roadmapPhases = [
   {
     phase: 'Phase 3',
     title: 'Production LLM & Guardrails',
-    color: '#10b981',
-    borderColor: '#059669',
+    color: 'var(--success)',
     items: [
       { label: 'LLM Gateway', desc: 'Route through a gateway (LiteLLM / custom proxy) with rate limiting, fallback models, and cost tracking per call.' },
       { label: 'Guardrail Service', desc: 'Deploy a dedicated guardrail layer (NeMo Guardrails / custom) that validates every agent response before TTS.' },
@@ -40,8 +37,7 @@ const roadmapPhases = [
   {
     phase: 'Phase 4',
     title: 'Enterprise Backend & Auth',
-    color: '#f59e0b',
-    borderColor: '#d97706',
+    color: 'var(--warning)',
     items: [
       { label: 'Real CRM Integration', desc: 'Replace localStorage with API calls to the actual CRM (Salesforce / internal) for customer data and stage management.' },
       { label: 'Identity & Auth', desc: 'Add SSO/OAuth for ops console access. Role-based access control for agents, supervisors, and admins.' },
@@ -52,8 +48,7 @@ const roadmapPhases = [
   {
     phase: 'Phase 5',
     title: 'Analytics & Continuous Improvement',
-    color: '#ef4444',
-    borderColor: '#dc2626',
+    color: 'var(--error)',
     items: [
       { label: 'Post-Call Analytics', desc: 'Build dashboards tracking CSAT, AHT, first-call resolution, objection patterns, and conversion by cohort.' },
       { label: 'Automated Eval Pipeline', desc: 'Run golden tests on every prompt change in CI. Block deployments that regress on critical guardrails.' },
@@ -73,8 +68,8 @@ export default function NextStepsPage() {
         </div>
       </div>
 
-      <div className="card" style={{ background: '#0f172a', border: '1px solid #1e293b', padding: '20px', marginBottom: '24px' }}>
-        <p style={{ margin: 0, fontSize: '1.05rem', color: '#e2e8f0', lineHeight: '1.7' }}>
+      <div className="card" style={{ borderLeft: '4px solid var(--primary)' }}>
+        <p style={{ margin: 0, fontSize: '1rem', lineHeight: '1.7' }}>
           This prototype proves the <strong>core design thesis</strong>: deterministic orchestration decides <em>what</em> happens, 
           the AI agent decides <em>how</em> to communicate it. The sections below outline the concrete engineering work 
           required to move from demo to production, organised by deployment phase.
@@ -82,67 +77,62 @@ export default function NextStepsPage() {
       </div>
 
       {roadmapPhases.map((phase) => (
-        <div key={phase.phase} className="card stack" style={{ borderLeft: `4px solid ${phase.color}`, marginBottom: '8px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
+        <div key={phase.phase} className="card stack" style={{ borderLeft: `4px solid ${phase.color}` }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '4px', flexWrap: 'wrap' }}>
             <span style={{ 
-              background: phase.color, 
-              color: '#fff', 
-              padding: '4px 12px', 
-              borderRadius: '4px', 
-              fontSize: '0.8rem', 
-              fontWeight: 700,
-              letterSpacing: '0.05em'
+              background: phase.color, color: '#fff', padding: '4px 12px', 
+              borderRadius: '999px', fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.05em'
             }}>
               {phase.phase}
             </span>
-            <h2 style={{ margin: 0, fontSize: '1.2rem' }}>{phase.title}</h2>
+            <h2 style={{ margin: 0, fontSize: '1.15rem' }}>{phase.title}</h2>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+          <div className="grid grid-2">
             {phase.items.map((item) => (
               <div key={item.label} style={{ 
-                padding: '14px', 
-                background: '#1e293b', 
-                borderRadius: '8px',
-                borderLeft: `3px solid ${phase.borderColor}`
+                padding: '14px', background: 'var(--surface-2)', borderRadius: '12px',
+                borderLeft: `3px solid ${phase.color}`
               }}>
-                <strong style={{ color: phase.color, fontSize: '0.95rem' }}>{item.label}</strong>
-                <p style={{ margin: '6px 0 0', fontSize: '0.85rem', color: '#94a3b8', lineHeight: '1.5' }}>{item.desc}</p>
+                <strong style={{ fontSize: '0.9rem' }}>{item.label}</strong>
+                <p style={{ margin: '4px 0 0', fontSize: '0.85rem', color: 'var(--muted)', lineHeight: '1.5' }}>{item.desc}</p>
               </div>
             ))}
           </div>
         </div>
       ))}
 
-      <div className="card" style={{ background: '#1a1a24', border: '1px solid #333', padding: '20px', marginTop: '8px' }}>
-        <h3 style={{ margin: '0 0 12px 0', color: '#fbbf24' }}>Current Prototype vs Production</h3>
-        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.9rem' }}>
-          <thead>
-            <tr style={{ borderBottom: '2px solid #475569' }}>
-              <th style={{ textAlign: 'left', padding: '10px 12px', color: '#e2e8f0', background: '#334155' }}>Capability</th>
-              <th style={{ textAlign: 'left', padding: '10px 12px', color: '#fcd34d', background: '#334155' }}>Prototype (Now)</th>
-              <th style={{ textAlign: 'left', padding: '10px 12px', color: '#6ee7b7', background: '#334155' }}>Production (Target)</th>
-            </tr>
-          </thead>
-          <tbody>
-            {[
-              ['Knowledge Base', 'Hardcoded in prompt (~15 facts)', 'Vector DB + RAG with chunked docs'],
-              ['Voice Engine', 'Browser Web Speech API', 'Vapi / Retell with <500ms latency'],
-              ['LLM', 'Gemini 1.5 Flash (direct)', 'LLM Gateway with fallback + cost tracking'],
-              ['CRM', 'localStorage mock', 'Real CRM API (Salesforce / internal)'],
-              ['WhatsApp', 'Mock tool function', 'WhatsApp Business API'],
-              ['Guardrails', 'Regex + rule-based checks', 'NeMo Guardrails + PII redaction service'],
-              ['Auth', 'None (demo)', 'SSO / OAuth + RBAC'],
-              ['Analytics', 'Seeded counters', 'Real-time dashboards + call QA pipeline'],
-            ].map(([cap, now, target], i) => (
-              <tr key={cap} style={{ borderBottom: '1px solid #334155', background: i % 2 === 0 ? '#1e293b' : '#0f172a' }}>
-                <td style={{ padding: '10px 12px', fontWeight: 600, color: '#f1f5f9' }}>{cap}</td>
-                <td style={{ padding: '10px 12px', color: '#fbbf24' }}>{now}</td>
-                <td style={{ padding: '10px 12px', color: '#34d399' }}>{target}</td>
+      <div className="card">
+        <h3 style={{ margin: '0 0 12px', color: 'var(--warning)' }}>Current Prototype vs Production</h3>
+        <div className="table-container">
+          <table className="table">
+            <thead>
+              <tr>
+                <th>Capability</th>
+                <th>Prototype (Now)</th>
+                <th>Production (Target)</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {[
+                ['Knowledge Base', 'Hardcoded in prompt (~15 facts)', 'Vector DB + RAG with chunked docs'],
+                ['Voice Engine', 'Browser Web Speech API', 'Vapi / Retell with <500ms latency'],
+                ['LLM', 'Gemini 1.5 Flash (direct)', 'LLM Gateway with fallback + cost tracking'],
+                ['CRM', 'localStorage mock', 'Real CRM API (Salesforce / internal)'],
+                ['WhatsApp', 'Mock tool function', 'WhatsApp Business API'],
+                ['Guardrails', 'Regex + rule-based checks', 'NeMo Guardrails + PII redaction service'],
+                ['Auth', 'None (demo)', 'SSO / OAuth + RBAC'],
+                ['Analytics', 'Seeded counters', 'Real-time dashboards + call QA pipeline'],
+              ].map(([cap, now, target]) => (
+                <tr key={cap}>
+                  <td style={{ fontWeight: 600 }}>{cap}</td>
+                  <td style={{ color: 'var(--warning)' }}>{now}</td>
+                  <td style={{ color: 'var(--success)' }}>{target}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
