@@ -9,6 +9,8 @@ const nav = [
   { href: '/customers', label: 'Customer Queue' },
   { href: '/playground', label: 'Agent Playground' },
   { href: '/evaluations', label: 'Evaluations' },
+  { href: '/system-design', label: 'System Design' },
+  { href: '/prompt-iterations', label: 'Prompt Iterations' },
   { href: '/prompt-blueprint', label: 'Prompt Blueprint' },
   { href: '/agent-blueprint', label: 'Agent Mega-Prompt' },
   { href: '/codex', label: 'Codex Spec' },
