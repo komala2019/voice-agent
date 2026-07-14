@@ -181,6 +181,29 @@ const slides = [
         </div>
       </div>
     )
+  },
+  {
+    title: "Comprehensive Blueprints & Documentation",
+    content: (
+      <div style={{ fontSize: '1.1rem', lineHeight: '1.6' }}>
+        <p>This prototype includes natively embedded documentation to bridge the gap between design specs and implementation.</p>
+        <br/>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+          <div style={{ border: '2px solid #00dfa2', padding: '15px', borderRadius: '8px', background: '#0b192c' }}>
+            <h3 style={{ color: '#00dfa2', margin: '0 0 10px 0' }}>1. Codex Spec</h3>
+            <p style={{ margin: 0, fontSize: '0.95rem' }}>The original assignment requirements and prototype scope.</p>
+          </div>
+          <div style={{ border: '2px solid #00dfa2', padding: '15px', borderRadius: '8px', background: '#0b192c' }}>
+            <h3 style={{ color: '#00dfa2', margin: '0 0 10px 0' }}>2. Prompt Blueprint</h3>
+            <p style={{ margin: 0, fontSize: '0.95rem' }}>The foundational system instruction set used by the LLM agent to enforce compliance and logic.</p>
+          </div>
+          <div style={{ border: '2px solid #00dfa2', padding: '15px', borderRadius: '8px', background: '#0b192c', gridColumn: '1 / -1' }}>
+            <h3 style={{ color: '#00dfa2', margin: '0 0 10px 0' }}>3. Agent Mega-Prompt</h3>
+            <p style={{ margin: 0, fontSize: '0.95rem' }}>A synthesized prompt sequence for establishing architecture, core capabilities, automated evaluation, and UI in fresh AI sessions.</p>
+          </div>
+        </div>
+      </div>
+    )
   }
 ];
 

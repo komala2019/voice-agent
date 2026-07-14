@@ -10,8 +10,10 @@ This repository contains two deliverables:
 - Overview dashboard
 - Customer queue
 - Customer detail / journey view
-- Agent playground with rule-based mock voice agent
+- Agent playground with both Offline (Rule-based Regex) and Online (Google Gemini 1.5 Flash LLM) voice modes
 - Golden test evaluation page
+- Interactive architecture diagram and presentation views
+- Embedded reference documents (Codex Spec, Prompt Blueprint, Agent Mega-Prompt)
 - Deterministic stage and next-best-action logic in pure functions
 - Seeded data with browser persistence
 

@@ -37,7 +37,7 @@ export default function ArchitecturePage() {
             <h3 style={{ marginTop: 0, color: '#5a5', textAlign: 'center' }}>Tiger Core AI</h3>
             <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
               <div style={{ border: '1px solid #5a5', padding: '18px', borderRadius: '10px', background: '#112211', flex: 1, textAlign: 'center', minWidth: '200px' }}>
-                <strong>LLM / NLU Engine</strong><br/><small>Dynamic Intent & Hinglish Parsing</small>
+                <strong>LLM / NLU Engine</strong><br/><small>Dynamic Intent & Hinglish Parsing<br/><span style={{ color: '#00dfa2' }}>(Governed by Prompt Blueprint)</span></small>
               </div>
               <div style={{ fontSize: '1.3rem', alignSelf: 'center' }}>↔️</div>
               <div style={{ border: '1px solid #5a5', padding: '18px', borderRadius: '10px', background: '#112211', flex: 1, textAlign: 'center', minWidth: '200px' }}>
@@ -157,8 +157,9 @@ export default function ArchitecturePage() {
 
           {/* UI Output */}
           <div style={{ border: '2px solid #06b6d4', padding: '18px', borderRadius: '12px', background: '#0c1929', width: '100%', maxWidth: '850px', textAlign: 'center' }}>
-            <h3 style={{ margin: 0, color: '#22d3ee' }}>Live UI Updates</h3>
+            <h3 style={{ margin: 0, color: '#22d3ee' }}>Live UI & Embedded Context Updates</h3>
             <p style={{ margin: '8px 0 0', color: '#aaa', fontSize: '14px' }}>Customer Context Card • Journey Timeline • Queue Table • Chat Transcript • Interaction History — all update reactively via shared ClientData context.</p>
+            <p style={{ margin: '8px 0 0', color: '#888', fontSize: '13px', fontStyle: 'italic' }}>Includes Native Documentation Routes: /codex, /prompt-blueprint, /agent-blueprint</p>
           </div>
         </div>
       </div>
